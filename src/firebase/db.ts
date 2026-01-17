@@ -1,9 +1,10 @@
 import * as admin from "firebase-admin";
 
-admin.initializeApp({
-  projectId: 'fitness-session-service' 
-});
 
-
+if (!admin.apps.length) {
+  admin.initializeApp({
+    projectId: process.env.GCLOUD_PROJECT || "fitness-session-service",
+  });
+}
 
 export const db = admin.firestore();
