@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.env
+firebase-debug.log
+.firebaserc.local
+.firestore/
+functions/node_modules/
+functions/.firebase/
