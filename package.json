@@ -7,7 +7,7 @@
     "build": "clear && tsc",
     "dev": "ts-node-dev src/index.ts",
     "start:local": "cross-env FIRESTORE_EMULATOR_HOST=127.0.0.1:8080 GCLOUD_PROJECT=fitness-session-service node dist/index.js",
-     "test": "cross-env NODE_ENV=test jest --runInBand",
+    "test": "cross-env NODE_ENV=test jest --runInBand",
     "test:watch": "npm test -- --watch"
   },
   "repository": {
