@@ -5,14 +5,15 @@ import { makeEvent } from "./helpers";
 
 describe("Idempotent ingest", () => {
   beforeEach(async () => {
-    // Clear collections before each test
     const events = await db.collection("sessionEvents").get();
     const sessions = await db.collection("sessions").get();
 
     await Promise.all(events.docs.map(doc => doc.ref.delete()));
     await Promise.all(sessions.docs.map(doc => doc.ref.delete()));
   });
-
+  /**
+   * Test #1 - retry duplicate
+   */
   it("ignores duplicate retry events and does not double count", async () => {
     const sessionId = "dupTest";
     const now = new Date();
@@ -35,7 +36,9 @@ describe("Idempotent ingest", () => {
     expect(session?.calories).toBe(50); // duplicate ignored
     expect(session?.eventCount).toBe(3); // counted only unique events
   });
-
+  /**
+   * Test #2 - out-of-order arrival
+   */
   it("should handle out-of-order events", async () => {
     const sessionId = "ooTest";
     const now = new Date();
@@ -57,6 +60,10 @@ describe("Idempotent ingest", () => {
     expect(session?.durationSec).toBe(1);
     expect(session?.startTime.toDate().getTime()).toBeLessThan(session?.endTime.toDate().getTime());
   });
+
+  /**
+   * Test #3 - partial update
+   */
 
   it("should handle partial sessions", async () => {
     const sessionId = "partialTest";
